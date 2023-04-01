@@ -1,44 +1,12 @@
-﻿using MathNet.Numerics;
-using MathNet.Numerics.LinearAlgebra;
+﻿using MathNet.Numerics.LinearAlgebra;
 
-namespace FastestSearch
+namespace Func2Minimizers
 {
-    public abstract class FSFunc2Minimizer
+    public abstract class FSFunc2Minimizer : Func2Minimizer
     {
-        public Vector<double>[] MinimizeFunc(Func<Vector<double>, double> f,
-                                             Vector<double> startPoint,
-                                             double e)
+        protected override Vector<double> CalcNextPoint(Vector<double> currentPoint, Func<Vector<double>, double> f)
         {
-            // List to store path
-            LinkedList<Vector<double>> result = new LinkedList<Vector<double>>();
-            result.AddLast(startPoint);
-
-            // Minimizing
-            Vector<double> currentPoint = startPoint;
-            while(!StopCriteria(f, currentPoint, e))
-            {
-                currentPoint = currentPoint - CalcGrad(f, currentPoint) * CalcLambda(f, currentPoint);
-                result.AddLast(currentPoint);
-            }
-            
-            // Returning
-            return result.ToArray();
-        }      
-
-        private bool StopCriteria(Func<Vector<double>, double> f,
-                                  Vector<double> point,
-                                  double e)
-        {
-            // Gradient module less than e
-            var module = CalcGrad(f, point).L2Norm();
-            return module <= e;
-        }
-
-        protected Vector<double> CalcGrad(Func<Vector<double>, double> f,
-                                          Vector<double> point)
-        {
-            // Map copy 
-            return point.MapIndexed<double>((i, x) => Differentiate.FirstPartialDerivative(p => f(CreateVector.Dense(p)), point.AsArray(), i));
+            return currentPoint - CalcGrad(f, currentPoint) * CalcLambda(f, currentPoint);
         }
 
         protected abstract double CalcLambda(Func<Vector<double>, double> f, Vector<double> point);

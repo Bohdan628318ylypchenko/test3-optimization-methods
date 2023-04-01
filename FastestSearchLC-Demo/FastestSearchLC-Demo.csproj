@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FastestSearch\FastestSearch.csproj" />
+    <ProjectReference Include="..\FastestSearch\Func2Min.csproj" />
   </ItemGroup>
 
 </Project>

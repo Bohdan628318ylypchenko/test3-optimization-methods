@@ -4,16 +4,12 @@ using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace Func2Minimizers
 {
-    public class FSLoFunc2Minimizer : FSFunc2Minimizer
+    public class NewtonFunc2Minimizer : Func2Minimizer
     {
-        protected override double CalcLambda(Func<Vector<double>, double> f, Vector<double> point)
+        protected override Vector<double> CalcNextPoint(Vector<double> currentPoint, 
+                                                        Func<Vector<double>, double> f)
         {
-            var g = CalcGrad(f, point);
-            var s = g.Multiply(-1.0);
-            
-            var H = CalcH(f, point);
-
-            return -1.0 * (g * s) / (((s * H) * s));
+            return currentPoint - CalcH(f, currentPoint).Inverse() * CalcGrad(f, currentPoint);
         }
 
         private Matrix<double> CalcH(Func<Vector<double>, double> f, Vector<double> point)
@@ -30,7 +26,7 @@ namespace Func2Minimizers
             double h22 = nd.EvaluateMixedPartialDerivative(arrf, arrp, new int[] { 1, 1 }, 2);
 
             // Returning
-            return DenseMatrix.OfArray(new double[,] { { h11, h12 }, 
+            return DenseMatrix.OfArray(new double[,] { { h11, h12 },
                                                        { h21, h22 } });
         }
     }

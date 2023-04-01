@@ -1,6 +1,6 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 
-namespace FastestSearch
+namespace Func2Minimizers
 {
     public class FSLcFunc2Minimizer : FSFunc2Minimizer
     {
